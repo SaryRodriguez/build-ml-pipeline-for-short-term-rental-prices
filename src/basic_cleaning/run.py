@@ -35,6 +35,11 @@ def go(args):
     logger.info('Convert feature "last_review" to datetime type')
     df_clean['last_review'] = pd.to_datetime(df_clean['last_review'])
 
+    # drop rows that are in the incorrect location
+    logger.info('Drop rows that are in the incorrect location')
+    idx = df_clean['longitude'].between(-74.25, -73.50) & df_clean['latitude'].between(40.5, 41.2)
+    df_clean = df_clean[idx].copy()
+
     # save cleaned dataframe
     logger.info(f'Save clean dataframe to {args.output_artifact}')
     df_clean.to_csv(args.output_artifact, index=False)
